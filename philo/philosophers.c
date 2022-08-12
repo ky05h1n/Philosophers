@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ky05h1n <ky05h1n@student.42.fr>            +#+  +:+       +#+        */
+/*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 17:03:18 by enja              #+#    #+#             */
-/*   Updated: 2022/08/12 12:07:05 by ky05h1n          ###   ########.fr       */
+/*   Updated: 2022/08/12 17:26:52 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,24 @@ int	main(int ac, char **av)
 
 	ptr = &ph_data;
 	(void)av;
-	n = 0;
+	n = 1;
 	if (ac == 5)
 	{
 		if (input_argcheck(ac, av) == 0)
+		{
+			printf("input error\n");
 			return (0);
+		}
 		else
 		{
-			while (av[n])
-			{
-				ptr->num_philo = input_num(av[n]);
-				ptr->time_to_die = input_num(av[n + 1]);
-			}
+			ptr->num_philo = input_num(av[n++]);
+			ptr->time_to_die = input_num(av[n++]);
+			ptr->time_to_eat = input_num(av[n++]);
+			ptr->time_to_sleep = input_num(av[n++]);
 		}
+		printf("num_philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d", ptr->num_philo, ptr->time_to_die, ptr->time_to_eat, ptr->time_to_sleep);
 	}
+
 	else
 		printf("input error\n");
 }
