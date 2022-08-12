@@ -22,3 +22,9 @@ fclean :
 		@echo "\033[1;32m File cleaned !"
 
 re : fclean all
+
+push :
+		git add .
+		git commit -m "philo"
+		git push
+		@echo "\033[1;32m File pushed !"
