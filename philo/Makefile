@@ -24,6 +24,7 @@ fclean :
 re : fclean all
 
 push :
+		@rm -f $(NAME)
 		git add .
 		git commit -m "philo"
 		git push
