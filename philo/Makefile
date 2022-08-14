@@ -1,6 +1,7 @@
 NAME = philo
 
-SRC = philosophers.c
+SRC = philosophers.c \
+	  philo_arg_treatment.c \
 
 GCC = cc
 
@@ -8,7 +9,7 @@ GCC = cc
 all : $(NAME)
 
 $(NAME) : $(SRC)
-	@gcc $(SRC) -Wall -Werror -Wextra -g -fsanitize=address -o $(NAME)
+	@gcc $(SRC) -Wall -Werror -Wextra -pthread -g -fsanitize=address -o $(NAME)
 	@echo "\033[1;32m Philo is ready !"
 
 
@@ -25,6 +26,7 @@ re : fclean all
 
 push :
 		@rm -f $(NAME)
+		@rm -rf philo.dSYM
 		git add .
 		git commit -m "philo"
 		git push

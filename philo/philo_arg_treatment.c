@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.h                                     :+:      :+:    :+:   */
+/*   philo_arg_treatment.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/11 17:04:36 by enja              #+#    #+#             */
-/*   Updated: 2022/08/14 22:04:03 by enja             ###   ########.fr       */
+/*   Created: 2022/08/14 20:46:21 by enja              #+#    #+#             */
+/*   Updated: 2022/08/14 22:02:39 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
+#include "philosophers.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <pthread.h>
-# include <unistd.h>
+t_data	*arg_treatemnt(int ac, char **av)
+{
+	t_data	ph_data;
+	t_data	*ptr;
 
-typedef struct t_data{
-	int	num_philo;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-}t_data;
-
-t_data	*arg_treatemnt(int ac, char **av);
-int		input_argcheck(int ac, char **av);
-void	assing_data(t_data *ptr, char **av);
-#endif
+	ptr = &ph_data;
+	if (input_argcheck(ac, av) == 0)
+	{
+		printf("input error\n");
+		return (NULL);
+	}
+	else
+		assing_data(ptr, av);
+	return (ptr);
+}
