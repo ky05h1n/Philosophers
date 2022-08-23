@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 17:03:18 by enja              #+#    #+#             */
-/*   Updated: 2022/08/15 18:16:11 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/23 17:59:56 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,31 @@ int	input_argcheck(int ac, char **av)
 	return (1);
 }
 
-void	assing_data(t_data *ptr, char **av)
-{
-	ptr->num_philo = input_num(av[1]);
-	ptr->time_to_die = input_num(av[2]);
-	ptr->time_to_eat = input_num(av[3]);
-	ptr->time_to_sleep = input_num(av[4]);
-}
-
 int	main(int ac, char **av)
 {
 	t_data	*ptr;
 
+	ptr = malloc(sizeof(t_data));
 	(void)av;
-	if (ac == 5)
+	if (ac == 5 || ac == 6)
 	{
-		ptr = arg_treatemnt(ac, av);
+		ptr = arg_treatemnt(ac, av, ptr);
 		if (!ptr)
 			return (0);
-		printf("num_philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\n", ptr->num_philo, ptr->time_to_die, ptr->time_to_eat, ptr->time_to_sleep);
+		if (ac == 5)
+		{
+			ptr->philos = malloc(ptr->num_philo * sizeof(t_data2));
+			ptr->forks = malloc(ptr->num_philo * sizeof(pthread_mutex_t));
+			threads_start(ptr);
+			// printf("num_philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\n", ptr->num_philo, ptr->time_to_die, ptr->time_to_eat, ptr->time_to_sleep);
+		}
+		else if (ac == 6)
+		{
+			// printf("num_philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\ntime_each_must_eat = %d\n", ptr->num_philo, ptr->time_to_die, ptr->time_to_eat, ptr->time_to_sleep, ptr->time_each_must_eat);
+			
+		}
 	}
+	else
+		printf("input error\n");
 	return (0);
 }
