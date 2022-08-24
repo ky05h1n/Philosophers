@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/08/23 20:09:21 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/25 00:19:05 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ typedef struct t_data2{
 	t_data			*ptr_data;
 }t_data2;
 
-t_data	*arg_treatemnt(int ac, char **av, t_data *ptr);
-int		input_argcheck(int ac, char **av);
-void	assing_data(t_data *ptr, char **av, int sing);
-int		input_num(char *av);
-void	threads_start(t_data *ptr);
-void	init_mutex(void);
-void	*synch_thread(void *arg);
-void	is_eating(t_data2 *ptr);
-void	is_sleeping(t_data2 ptr);
-
+t_data		*arg_treatemnt(int ac, char **av, t_data *ptr);
+int			input_argcheck(int ac, char **av);
+void		assing_data(t_data *ptr, char **av, int sing);
+int			input_num(char *av);
+void		threads_start(t_data *ptr);
+void		init_mutex(void);
+void		*synch_thread(void *arg);
+void		is_eating(t_data2 *ptr);
+void		is_sleeping(t_data2 ptr);
+long int	get_time(void);
 #endif

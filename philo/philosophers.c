@@ -6,11 +6,32 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 17:03:18 by enja              #+#    #+#             */
-/*   Updated: 2022/08/24 18:55:42 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/25 00:21:38 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+long int	get_time(void)
+{
+	struct timeval	timing;
+	long int		time;
+
+	if (gettimeofday(&timing, NULL) == -1)
+		return (0);
+	time = (timing.tv_sec * 1000) + (timing.tv_usec / 1000);
+	return (time);
+}
+
+void	ft_usleep(int time)
+{
+	while (time > 100)
+	{
+		usleep(100);
+		time -= 100;
+	}
+	usleep(time);
+}
 
 int	input_num(char *av)
 {
@@ -76,6 +97,6 @@ int	main(int ac, char **av)
 		}
 	}
 	else
-		printf("\n NAME --v\n	philo\n\n [USAGE]\n\n	~>  ./philo [NUMBER_OF_PHILOSPHERS] [TIME_TO_DIE] [TIME_TO_EAT] [TIME_TO_SLEEP] [TIME_EACH_PHILOSOPHER_MUST_EAT]\n\n 	    - The Last Argument is Optional !\n\n\n");
+		printf("\n NAME\n      - philo\n\n [USAGE]\n\n	~>  ./philo [NUMBER_OF_PHILOSPHERS] [TIME_TO_DIE] [TIME_TO_EAT] [TIME_TO_SLEEP] [TIME_EACH_PHILOSOPHER_MUST_EAT]\n\n 	    -> The Last Argument is Optional !\n\n\n");
 	return (0);
 }
