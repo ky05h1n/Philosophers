@@ -28,6 +28,7 @@ push :
 		@rm -f $(NAME)
 		@rm -rf philo.dSYM
 		git add .
+		git status
 		git commit -m "philo"
 		git push
 		@echo "\033[1;32m File pushed !"
