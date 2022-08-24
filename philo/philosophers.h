@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/08/23 18:38:43 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/23 20:09:21 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	assing_data(t_data *ptr, char **av, int sing);
 int		input_num(char *av);
 void	threads_start(t_data *ptr);
 void	init_mutex(void);
-void	*synch_thread(void *ptr);
-void	is_eating(int i, t_data2 ptr);
-void	is_sleeping(int i, t_data2 ptr);
+void	*synch_thread(void *arg);
+void	is_eating(t_data2 *ptr);
+void	is_sleeping(t_data2 ptr);
 
 #endif

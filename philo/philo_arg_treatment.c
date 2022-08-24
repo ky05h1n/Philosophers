@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 20:46:21 by enja              #+#    #+#             */
-/*   Updated: 2022/08/23 18:39:15 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/23 20:09:52 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,55 +39,52 @@ t_data	*arg_treatemnt(int ac, char **av, t_data *ptr)
 	return (ptr);
 }
 
-void	is_eating(int i, t_data2 ptr)
+void	is_eating(t_data2 *ptr)
 {
-	(void)i;
-	pthread_mutex_lock(&ptr.ptr_data->forks[ptr.l_fork]);
-	printf("philo %d taken left %d fork\n", ptr.philo, ptr.l_fork);
-	pthread_mutex_lock(&ptr.ptr_data->forks[ptr.r_fork]);
-	printf("philo %d taken right %d fork\n", ptr.philo, ptr.r_fork);
-	printf("philo %d is eating\n", ptr.philo);
-	pthread_mutex_unlock(&ptr.ptr_data->forks[ptr.l_fork]);
-	pthread_mutex_unlock(&ptr.ptr_data->forks[ptr.r_fork]);
+	pthread_mutex_lock(&ptr->ptr_data->forks[ptr->l_fork]);
+	pthread_mutex_lock(&ptr->ptr_data->forks[ptr->r_fork]);
+	printf("philo %d taken left %d fork\n", ptr->philo, ptr->l_fork);
+	printf("philo %d taken right %d fork\n", ptr->philo, ptr->r_fork);
+	printf("philo %d is eating\n", ptr->philo);
+	sleep(1);
+	pthread_mutex_unlock(&ptr->ptr_data->forks[ptr->l_fork]);
+	pthread_mutex_unlock(&ptr->ptr_data->forks[ptr->r_fork]);
 	return ;
 }
 
-void	is_sleeping(int i, t_data2 ptr)
-{
-	(void)i;
-	printf("philo %d is sleepin\n", ptr.philo);
-}
+// void	is_sleeping(t_data2 ptr)
+// {
+// 	printf("philo %d is sleepin\n", ptr.philo);
+// }
 
 void	*synch_thread(void *arg)
 {
 	t_data2				*ptr;
-	static int			i;
 
 	ptr = (t_data2 *)arg;
-	if (ptr[i].philo % 2 == 1)
-		is_eating(i, ptr[i]);
+	if (ptr->philo % 2 == 1)
+		is_eating(ptr);
 	else
-		is_sleeping(i, ptr[i]);
-	i++;
+		usleep(2000);
 	return (NULL);
 }
 
 void	threads_start(t_data *ptr)
 {
-	int i;
-	
+	int	i;
+
 	i = -1;
 	while (++i < ptr->num_philo)
 		pthread_mutex_init(&ptr->forks[i], NULL);
 	i = -1;
-	while(++i < ptr->num_philo)
+	while (++i < ptr->num_philo)
 	{
 		ptr->philos[i].ptr_data = ptr;
 		ptr->philos[i].philo = i + 1;
 		ptr->philos[i].l_fork = i;
 		ptr->philos[i].r_fork = (i + 1) % ptr->num_philo;
-		pthread_create(&ptr->philos[i].thread, NULL, synch_thread, ptr->philos);
-		sleep(1);
+		pthread_create(&ptr->philos[i].thread, NULL, synch_thread, &ptr->philos[i]);
+		usleep(110000);
 	}
 	i = -1;
 	while(++i < ptr->num_philo)
