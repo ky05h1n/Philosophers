@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/08/25 00:24:00 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/29 23:12:34 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 typedef struct t_data{
 	int				num_philo;
@@ -24,7 +25,9 @@ typedef struct t_data{
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_each_must_eat;
+	long int		time_start;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*printing;
 	struct t_data2	*philos;
 }t_data;
 
@@ -33,6 +36,8 @@ typedef struct t_data2{
 	int				philo;
 	int				l_fork;
 	int				r_fork;
+	long int		time;
+	long int		last_meal;
 	t_data			*ptr_data;
 }t_data2;
 
@@ -43,7 +48,10 @@ int			input_num(char *av);
 void		threads_start(t_data *ptr);
 void		init_mutex(void);
 void		*synch_thread(void *arg);
-void		is_eating(t_data2 *ptr);
+void		*thread_routing(void *arg);
 void		is_sleeping(t_data2 ptr);
 long int	get_time(void);
+void		ft_usleep(int time);
+int			timediff(t_data2 ptr);
+
 #endif

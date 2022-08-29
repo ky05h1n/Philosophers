@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 17:03:18 by enja              #+#    #+#             */
-/*   Updated: 2022/08/25 00:23:54 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/27 23:38:12 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@ long int	get_time(void)
 
 void	ft_usleep(int time)
 {
-	while (time > 100)
-	{
-		usleep(100);
-		time -= 100;
-	}
-	usleep(time);
+	long long	t;
+
+	t = get_time();
+	while (get_time() - t < time)
+		usleep(60);
 }
 
 int	input_num(char *av)
@@ -77,6 +76,7 @@ int	main(int ac, char **av)
 	t_data	*ptr;
 
 	ptr = malloc(sizeof(t_data));
+	ptr->time_start = get_time();
 	(void)av;
 	if (ac == 5 || ac == 6)
 	{
@@ -87,7 +87,9 @@ int	main(int ac, char **av)
 		{
 			ptr->philos = malloc(ptr->num_philo * sizeof(t_data2));
 			ptr->forks = malloc(ptr->num_philo * sizeof(pthread_mutex_t));
+			ptr->printing = malloc(sizeof(pthread_mutex_t));
 			threads_start(ptr);
+			return (0);
 			// printf("num_philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\n", ptr->num_philo, ptr->time_to_die, ptr->time_to_eat, ptr->time_to_sleep);
 		}
 		else if (ac == 6)

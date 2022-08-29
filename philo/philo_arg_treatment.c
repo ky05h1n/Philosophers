@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 20:46:21 by enja              #+#    #+#             */
-/*   Updated: 2022/08/25 00:23:56 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/29 23:13:07 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,38 +39,44 @@ t_data	*arg_treatemnt(int ac, char **av, t_data *ptr)
 	return (ptr);
 }
 
-void	is_eating(t_data2 *ptr)
-{
-	while (1)
-	{
-		pthread_mutex_lock(&ptr->ptr_data->forks[ptr->l_fork]);
-		printf("philo %d taken left %d fork\n", ptr->philo, ptr->l_fork);
-		pthread_mutex_lock(&ptr->ptr_data->forks[ptr->r_fork]);
-		printf("philo %d taken right %d fork\n", ptr->philo, ptr->r_fork);
-		printf("philo %d is eating\n", ptr->philo);
-		sleep(1);
-		pthread_mutex_unlock(&ptr->ptr_data->forks[ptr->l_fork]);
-		pthread_mutex_unlock(&ptr->ptr_data->forks[ptr->r_fork]);
-		usleep(200);
-	}
-	return ;
-}
-
-void	*synch_thread(void *arg)
+void	*thread_routing(void *arg)
 {
 	t_data2				*ptr;
 
 	ptr = (t_data2 *)arg;
-	if (ptr->philo % 2 == 1)
-		is_eating(ptr);
-	else
+	while (1)
 	{
-		usleep(200);
-		is_eating(ptr);
+		pthread_mutex_lock(&ptr->ptr_data->forks[ptr->l_fork]);
+		pthread_mutex_lock(ptr->ptr_data->printing);
+		printf("%ld ms %d has taken a fork %d fork\n", get_time() - ptr->time, ptr->philo, ptr->l_fork);
+		pthread_mutex_unlock(ptr->ptr_data->printing);
+		pthread_mutex_lock(&ptr->ptr_data->forks[ptr->r_fork]);
+		pthread_mutex_lock(ptr->ptr_data->printing);
+		printf("%ld ms %d has taken a fork %d fork\n", get_time() - ptr->time, ptr->philo, ptr->r_fork);
+		pthread_mutex_unlock(ptr->ptr_data->printing);
+		pthread_mutex_lock(ptr->ptr_data->printing);
+		printf("%ld ms %d is eating\n",get_time() - ptr->time, ptr->philo);
+		ptr->last_meal = get_time() - ptr->time;
+		pthread_mutex_unlock(ptr->ptr_data->printing);
+		ft_usleep(ptr->ptr_data->time_to_eat);
+		pthread_mutex_unlock(&ptr->ptr_data->forks[ptr->l_fork]);
+		pthread_mutex_unlock(&ptr->ptr_data->forks[ptr->r_fork]);
+		pthread_mutex_lock(ptr->ptr_data->printing);
+		printf("%ld ms %d is sleeping\n",get_time() - ptr->time, ptr->philo);
+		pthread_mutex_unlock(ptr->ptr_data->printing);
+		ft_usleep(ptr->ptr_data->time_to_sleep);
+		pthread_mutex_lock(ptr->ptr_data->printing);
+		printf("%ld ms %d is thinking\n", get_time() - ptr->time, ptr->philo);
+		pthread_mutex_unlock(ptr->ptr_data->printing);
 	}
 	return (NULL);
 }
 
+// int timediff(t_data2 ptr)
+// {
+// 	printf("-----> %ld\n", (get_time() - ptr.last_meal) - ptr.ptr_data->time_start);
+// 	return(((get_time() - ptr.last_meal) - ptr.ptr_data->time_start));
+// }
 void	threads_start(t_data *ptr)
 {
 	int	i;
@@ -81,15 +87,34 @@ void	threads_start(t_data *ptr)
 	i = -1;
 	while (++i < ptr->num_philo)
 	{
+		ptr->philos[i].time = get_time();
+		ptr->philos[i].last_meal = 0;
 		ptr->philos[i].ptr_data = ptr;
 		ptr->philos[i].philo = i + 1;
 		ptr->philos[i].l_fork = i;
 		ptr->philos[i].r_fork = (i + 1) % ptr->num_philo;
-		pthread_create(&ptr->philos[i].thread, NULL, synch_thread,
-			&ptr->philos[i]);
-		usleep(110000);
 	}
 	i = -1;
 	while (++i < ptr->num_philo)
-		pthread_join(ptr->philos[i].thread, NULL);
+	{
+		pthread_create(&ptr->philos[i].thread, NULL, thread_routing, &ptr->philos[i]);
+		usleep(60);
+		// ptr->philos[i].last_meal = get_time() - ptr->philos[i].time;
+		// printf("-->> me\n");
+	}
+	i = 0;
+	while (1)
+	{
+			// printf("----> %ld\n", get_time() - ptr->time_start);
+		if ((get_time() - ptr->time_start) - (ptr->philos[i].last_meal) >= ptr->time_to_die)
+		{
+			pthread_mutex_lock(ptr->philos[i].ptr_data->printing);
+			printf("%ld ms %d died\n", get_time() - ptr->philos[i].time, ptr->philos[i].philo);
+			pthread_mutex_lock(ptr->philos[i].ptr_data->printing);
+			break;
+		}
+		i++;
+		if (ptr->num_philo == i)
+			i = 0;
+	}
 }
