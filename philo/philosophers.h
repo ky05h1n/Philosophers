@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/08/29 23:12:34 by enja             ###   ########.fr       */
+/*   Updated: 2022/08/30 02:09:56 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct t_data{
 
 typedef struct t_data2{
 	pthread_t		thread;
-	int				philo;
+	int				philo_id;
 	int				l_fork;
 	int				r_fork;
 	long int		time;
@@ -45,13 +45,14 @@ t_data		*arg_treatemnt(int ac, char **av, t_data *ptr);
 int			input_argcheck(int ac, char **av);
 void		assing_data(t_data *ptr, char **av, int sing);
 int			input_num(char *av);
-void		threads_start(t_data *ptr);
-void		init_mutex(void);
-void		*synch_thread(void *arg);
-void		*thread_routing(void *arg);
-void		is_sleeping(t_data2 ptr);
+void		struct_creat(t_data *ptr);
+void		threads_creat(t_data *ptr);
+void		*thread_start(void *arg);
 long int	get_time(void);
 void		ft_usleep(int time);
-int			timediff(t_data2 ptr);
+void		msg(void);
+void		taken_fork(t_data2 *philo);
+void		is_eating(t_data2 *philo);
+void		is_sleeping(t_data2 *philo);
 
 #endif

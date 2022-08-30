@@ -1,7 +1,10 @@
 NAME = philo
 
-SRC = philosophers.c \
-	  philo_arg_treatment.c \
+SRC = philo_args.c \
+	  philo_utils.c \
+	  philo_main.c \
+	  philo_threadinit.c \
+
 
 GCC = cc
 
