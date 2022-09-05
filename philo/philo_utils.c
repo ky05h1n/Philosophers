@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:27:28 by enja              #+#    #+#             */
-/*   Updated: 2022/09/05 13:46:52 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/05 15:58:43 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,13 @@ void	taken_fork(t_data2 *philo)
 void	is_eating(t_data2 *philo)
 {
 	printf("%ld ms %d is eating\n", get_time() - philo->time, philo->philo_id);
-	philo->last_meal = get_time() - philo->time;
+	philo->ptr_data->num_eat++;
 	ft_usleep(philo->ptr_data->time_to_eat);
 }
 
 void	is_sleeping(t_data2 *philo)
 {
+	philo->last_meal = get_time() - philo->time;
 	pthread_mutex_unlock(&philo->ptr_data->forks[philo->l_fork]);
 	pthread_mutex_unlock(&philo->ptr_data->forks[philo->r_fork]);
 	printf("%ld ms %d is sleeping\n", get_time() - philo->time, philo->philo_id);

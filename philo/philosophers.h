@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/09/05 13:48:16 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/05 15:46:56 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct t_data{
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_each_must_eat;
+	int				num_eat;
 	long int		time_start;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*printing;

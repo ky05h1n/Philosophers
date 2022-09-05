@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 20:46:21 by enja              #+#    #+#             */
-/*   Updated: 2022/08/29 23:36:39 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/05 15:29:43 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_data	*arg_treatemnt(int ac, char **av, t_data *ptr)
 {
 	if (input_argcheck(ac, av) == 0)
 	{
-		printf("input error\n");
+		msg();
 		return (NULL);
 	}
 	else
