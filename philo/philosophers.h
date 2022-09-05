@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/08/30 02:09:56 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/05 13:48:16 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int			input_argcheck(int ac, char **av);
 void		assing_data(t_data *ptr, char **av, int sing);
 int			input_num(char *av);
 void		struct_creat(t_data *ptr);
-void		threads_creat(t_data *ptr);
+void		*threads_creat(t_data *ptr);
 void		*thread_start(void *arg);
 long int	get_time(void);
 void		ft_usleep(int time);

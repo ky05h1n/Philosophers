@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:35:23 by enja              #+#    #+#             */
-/*   Updated: 2022/08/30 02:16:23 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/05 13:46:16 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	struct_creat(t_data *ptr)
 	while (++i < ptr->num_philo)
 	{
 		ptr->philos[i].time = get_time();
+		ptr->philos[i].last_meal = 0;
 		ptr->philos[i].ptr_data = ptr;
 		ptr->philos[i].philo_id = i + 1;
 		ptr->philos[i].l_fork = i;
@@ -31,7 +32,7 @@ void	struct_creat(t_data *ptr)
 	threads_creat(ptr);
 }
 
-void	threads_creat(t_data *ptr)
+void	*threads_creat(t_data *ptr)
 {
 	int	i;
 
@@ -42,7 +43,20 @@ void	threads_creat(t_data *ptr)
 			&ptr->philos[i]);
 		usleep(60);
 	}
-	while (1);
+	i = 0;
+	while (1)
+	{
+		if ((get_time() - ptr->philos[i].time) - ptr->philos[i].last_meal >= ptr->time_to_die)
+		{
+			printf("%ld ms %d died", get_time() - ptr->philos[i].time, ptr->philos[i].philo_id);
+			break ;
+			return (NULL);
+		}
+		i++;
+		if (i == ptr->num_philo)
+			i = 0;
+	}
+	return (NULL);
 }
 
 void	*thread_start(void *arg)
