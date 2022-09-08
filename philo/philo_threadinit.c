@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:35:23 by enja              #+#    #+#             */
-/*   Updated: 2022/09/05 16:06:36 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/08 21:00:04 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ void	struct_creat(t_data *ptr)
 	i = -1;
 	while (++i < ptr->num_philo)
 		pthread_mutex_init(&ptr->forks[i], NULL);
+	pthread_mutex_init(&ptr->edit, NULL);
+	pthread_mutex_init(&ptr->lock, NULL);
+	pthread_mutex_init(&ptr->sin, NULL);
 	i = -1;
 	while (++i < ptr->num_philo)
 	{
@@ -38,24 +41,29 @@ void	*threads_creat(t_data *ptr)
 	int	i;
 
 	i = -1;
+	ptr->sig = 0;
 	while (++i < ptr->num_philo)
 	{
 		pthread_create(&ptr->philos[i].thread, NULL, thread_start,
 			&ptr->philos[i]);
-		usleep(200);
+		usleep(10);
 	}
 	i = 0;
 	while (1)
 	{
 		if (i == ptr->num_philo)
 			i = 0;
+		pthread_mutex_lock(&ptr->sin);
+		if (ptr->sig == 1)
+			return (NULL);
+		pthread_mutex_unlock(&ptr->sin);
+		pthread_mutex_lock(&ptr->lock);
 		if ((get_time() - ptr->philos[i].time) - ptr->philos[i].last_meal >= ptr->time_to_die)
 		{
 			printf("%ld ms %d died", get_time() - ptr->philos[i].time, ptr->philos[i].philo_id);
 			return (NULL);
 		}
-		if (ptr->time_each_must_eat > 0 && ptr->num_philo * ptr->time_each_must_eat == ptr->num_eat)
-			return (NULL);
+		pthread_mutex_unlock(&ptr->lock);
 		i++;
 	}
 	return (NULL);
@@ -64,7 +72,7 @@ void	*threads_creat(t_data *ptr)
 void	*thread_start(void *arg)
 {
 	t_data2	*ptr;
-
+	
 	ptr = (t_data2 *)arg;
 	while (1)
 	{

@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 20:46:21 by enja              #+#    #+#             */
-/*   Updated: 2022/09/05 15:29:43 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/06 17:34:35 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	input_argcheck(int ac, char **av)
 	ndx = 0;
 	while (idx < ac)
 	{
-		if (av[idx][0] == '0')
+		if (!av[idx][0] || av[idx][0] == '0')
 			return (0);
 		while (av[idx][ndx])
 		{
