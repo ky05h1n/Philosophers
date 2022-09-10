@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:35:23 by enja              #+#    #+#             */
-/*   Updated: 2022/09/08 21:00:04 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/10 00:57:50 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	struct_creat(t_data *ptr)
 	pthread_mutex_init(&ptr->edit, NULL);
 	pthread_mutex_init(&ptr->lock, NULL);
 	pthread_mutex_init(&ptr->sin, NULL);
+	pthread_mutex_init(&ptr->print, NULL);
 	i = -1;
 	while (++i < ptr->num_philo)
 	{
@@ -46,7 +47,6 @@ void	*threads_creat(t_data *ptr)
 	{
 		pthread_create(&ptr->philos[i].thread, NULL, thread_start,
 			&ptr->philos[i]);
-		usleep(10);
 	}
 	i = 0;
 	while (1)
@@ -58,10 +58,14 @@ void	*threads_creat(t_data *ptr)
 			return (NULL);
 		pthread_mutex_unlock(&ptr->sin);
 		pthread_mutex_lock(&ptr->lock);
-		if ((get_time() - ptr->philos[i].time) - ptr->philos[i].last_meal >= ptr->time_to_die)
+		if ((get_time() - ptr->philos[i].time) - ptr->philos[i].last_meal
+			>= ptr->time_to_die)
 		{
-			printf("%ld ms %d died", get_time() - ptr->philos[i].time, ptr->philos[i].philo_id);
+			pthread_mutex_lock(&ptr->edit);
+			printf("%ld ms %d died", get_time() - ptr->philos[i].time,
+				ptr->philos[i].philo_id);
 			return (NULL);
+			pthread_mutex_unlock(&ptr->edit);
 		}
 		pthread_mutex_unlock(&ptr->lock);
 		i++;
@@ -74,6 +78,8 @@ void	*thread_start(void *arg)
 	t_data2	*ptr;
 	
 	ptr = (t_data2 *)arg;
+	if (ptr->philo_id % 2 == 0)
+		usleep(200);
 	while (1)
 	{
 		taken_fork(ptr);

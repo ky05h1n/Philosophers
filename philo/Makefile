@@ -12,7 +12,7 @@ GCC = cc
 all : $(NAME)
 
 $(NAME) : $(SRC)
-	@gcc $(SRC) -Wall -Werror -Wextra -g -fsanitize=thread -pthread -o $(NAME)
+	@gcc $(SRC) -Wall -Werror -Wextra -pthread -o $(NAME)
 	@echo "\033[1;32m Philo is ready !"
 
 

@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 18:15:08 by enja              #+#    #+#             */
-/*   Updated: 2022/09/08 18:58:29 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/09 22:12:23 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct t_data{
 	long int		time_start;
 	int				sig;
 	pthread_mutex_t	sin;
+	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	edit;
 	pthread_mutex_t	lock;

@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:27:28 by enja              #+#    #+#             */
-/*   Updated: 2022/09/08 20:54:06 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/10 00:07:01 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_usleep(int time)
 
 	t = get_time();
 	while (get_time() - t < time)
-		usleep(60);
+		usleep(30);
 }
 
 long int	get_time(void)
@@ -45,26 +45,26 @@ void	msg(void)
 void	taken_fork(t_data2 *philo)
 {
 	pthread_mutex_lock(&philo->ptr_data->forks[philo->l_fork]);
-	pthread_mutex_lock(&philo->ptr_data->forks[philo->r_fork]);
 	pthread_mutex_lock(&philo->ptr_data->edit);
 	printf("%ld ms %d has taken a fork %d\n", get_time() - philo->time, philo->philo_id, philo->l_fork);
 	pthread_mutex_unlock(&philo->ptr_data->edit);
+	pthread_mutex_lock(&philo->ptr_data->forks[philo->r_fork]);
 	pthread_mutex_lock(&philo->ptr_data->edit);
 	printf("%ld ms %d has taken a fork %d\n", get_time() - philo->time, philo->philo_id, philo->r_fork);
-	pthread_mutex_unlock(&philo->ptr_data->edit);	
+	pthread_mutex_unlock(&philo->ptr_data->edit);
 }
 
 void	is_eating(t_data2 *philo)
 {
-	pthread_mutex_lock(&philo->ptr_data->lock);
+	pthread_mutex_lock(&philo->ptr_data->edit);
+	printf("%ld ms %d is eating\n", get_time() - philo->time, philo->philo_id);
+	pthread_mutex_unlock(&philo->ptr_data->edit);
 	pthread_mutex_lock(&philo->ptr_data->sin);
 	philo->ptr_data->num_eat++;
-	pthread_mutex_unlock(&philo->ptr_data->sin);
-	pthread_mutex_lock(&philo->ptr_data->sin);
 	if (philo->ptr_data->time_each_must_eat > 0 && philo->ptr_data->num_philo * philo->ptr_data->time_each_must_eat == philo->ptr_data->num_eat)
 		philo->ptr_data->sig = 1;
 	pthread_mutex_unlock(&philo->ptr_data->sin);
-	printf("%ld ms %d is eating\n", get_time() - philo->time, philo->philo_id);
+	pthread_mutex_lock(&philo->ptr_data->lock);
 	philo->last_meal = get_time() - philo->time;
 	pthread_mutex_unlock(&philo->ptr_data->lock);
 	ft_usleep(philo->ptr_data->time_to_eat);
