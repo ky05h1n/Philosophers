@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:35:23 by enja              #+#    #+#             */
-/*   Updated: 2022/09/10 00:57:50 by enja             ###   ########.fr       */
+/*   Updated: 2022/09/10 01:48:43 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,14 @@ void	*threads_creat(t_data *ptr)
 		pthread_create(&ptr->philos[i].thread, NULL, thread_start,
 			&ptr->philos[i]);
 	}
+	thread_check(ptr);
+	return (NULL);
+}
+
+void	thread_check(t_data *ptr)
+{
+	int	i;
+
 	i = 0;
 	while (1)
 	{
@@ -55,7 +63,7 @@ void	*threads_creat(t_data *ptr)
 			i = 0;
 		pthread_mutex_lock(&ptr->sin);
 		if (ptr->sig == 1)
-			return (NULL);
+			break ;
 		pthread_mutex_unlock(&ptr->sin);
 		pthread_mutex_lock(&ptr->lock);
 		if ((get_time() - ptr->philos[i].time) - ptr->philos[i].last_meal
@@ -64,19 +72,18 @@ void	*threads_creat(t_data *ptr)
 			pthread_mutex_lock(&ptr->edit);
 			printf("%ld ms %d died", get_time() - ptr->philos[i].time,
 				ptr->philos[i].philo_id);
-			return (NULL);
+			break ;
 			pthread_mutex_unlock(&ptr->edit);
 		}
 		pthread_mutex_unlock(&ptr->lock);
 		i++;
 	}
-	return (NULL);
 }
 
 void	*thread_start(void *arg)
 {
 	t_data2	*ptr;
-	
+
 	ptr = (t_data2 *)arg;
 	if (ptr->philo_id % 2 == 0)
 		usleep(200);
