@@ -6,20 +6,13 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:27:28 by enja              #+#    #+#             */
-/*   Updated: 2022/09/10 01:15:47 by enja             ###   ########.fr       */
+/*   Updated: 2023/04/10 21:13:28 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	ft_usleep(int time)
-{
-	long long	t;
 
-	t = get_time();
-	while (get_time() - t < time)
-		usleep(30);
-}
 
 long int	get_time(void)
 {

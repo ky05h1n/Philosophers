@@ -6,7 +6,7 @@
 /*   By: enja <enja@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 23:35:23 by enja              #+#    #+#             */
-/*   Updated: 2022/09/10 01:48:43 by enja             ###   ########.fr       */
+/*   Updated: 2023/04/10 21:13:41 by enja             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,13 @@ void	*thread_start(void *arg)
 		is_eating(ptr);
 		is_sleeping(ptr);
 	}
+}
+
+void	ft_usleep(int time)
+{
+	long long	t;
+
+	t = get_time();
+	while (get_time() - t < time)
+		usleep(30);
 }
